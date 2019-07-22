@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/process', 'ProcessController@index');
+Route::get('/process/testing', 'ProcessController@testing');
 
 Route::get('/training', 'DataTrainingController@index');
 Route::post('/training/import-csv', 'DataTrainingController@import_csv')->name('importCSV');

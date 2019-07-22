@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Phpml\Classification\NaiveBayes;
 
 class ProcessController extends Controller
 {
@@ -80,5 +81,28 @@ class ProcessController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function testing(Request $request)
+    {
+        $kesukaran = strtolower($request->input('kesukaran'));
+        $pembeda = strtolower($request->input('pembeda'));
+
+        $samples = [
+            ['diterima', 'diterima'], ['diterima', 'direvisi'], ['diterima', 'ditolak'],
+            ['direvisi', 'diterima'], ['direvisi', 'direvisi'], ['direvisi', 'ditolak'],
+            ['ditolak', 'diterima'], ['ditolak', 'direvisi'], ['ditolak', 'ditolak']
+        ];
+        $labels = [
+            'diterima', 'direvisi', 'ditolak',
+            'direvisi', 'direvisi', 'ditolak',
+            'ditolak', 'ditolak', 'ditolak'
+        ];
+
+        $classifier = new NaiveBayes();
+        $classifier->train($samples, $labels);
+        $output = $classifier->predict([$kesukaran, $pembeda]);
+
+        return redirect('/process')->with('output', $output)->with('input', ['kesukaran' => $kesukaran, 'pembeda' => $pembeda]);
     }
 }
