@@ -12,9 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.app');
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/process', 'ProcessController@index');
+
+Route::get('/training', 'DataTrainingController@index');
+Route::post('/training/import-csv', 'DataTrainingController@import_csv')->name('importCSV');
