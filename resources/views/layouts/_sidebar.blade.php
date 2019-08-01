@@ -2,9 +2,12 @@
     <div class="sidebar-scroll">
         <nav>
             <ul class="nav">
-                <li><a href="#" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
-                <li><a href="{{url('/process')}}"><i class="lnr lnr-code"></i> <span>Proses</span></a></li>
-                <li><a href="{{url('/training')}}"><i class="lnr lnr-database"></i> <span>Training Data</span></a></li>
+                <li><a href="#" class="" id="dashboard"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="{{url('/question')}}" class="" id="question"><i class="lnr lnr-file-empty"></i> <span>Unggah Soal</span></a></li>
+                <li><a href="{{url('/answer')}}" class="" id="answer"><i class="lnr lnr-list"></i> <span>Unggah Jawaban</span></a></li>
+                <li><a href="{{url('/analysis')}}" class="" id="analysis"><i class="lnr lnr-inbox"></i> <span>Analisis Soal</span></a></li>
+                <li><a href="{{url('/process')}}" class="" id="process"><i class="lnr lnr-code"></i> <span>Proses</span></a></li>
+                <li><a href="{{url('/training')}}" class="" id="training"><i class="lnr lnr-database"></i> <span>Training Data</span></a></li>
                 <!-- <li><a href="elements.html" class=""><i class="lnr lnr-code"></i> <span>Elements</span></a></li>
                 <li><a href="charts.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Charts</span></a></li>
                 <li><a href="panels.html" class=""><i class="lnr lnr-cog"></i> <span>Panels</span></a></li>
