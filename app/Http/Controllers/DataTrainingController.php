@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\DataTraining;
 use App\Imports\DataTrainingImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class DataTrainingController extends Controller
 {
@@ -90,7 +91,6 @@ class DataTrainingController extends Controller
 
     public function import_csv(Request $request)
     {
-        // validasi
         try {
             $this->validate($request, [
                 'csvFile' => 'required|mimes:csv'
@@ -100,27 +100,13 @@ class DataTrainingController extends Controller
 
         DataTraining::query()->delete();
 
-        $path = storage_path('app/public/data/');
-
-        if(!File::exists($path))
-            File::makeDirectory($path);
-
-        // menangkap file excel
         $file = $request->file('csvFile');
-
-        // membuat nama file unik
-        $file_name = 'datatraining.'.$file->getClientOriginalExtension();
-
-        // upload ke folder
-        $file->move($path, $file_name);
+        $filename = 'datatraining.'.$file->getClientOriginalExtension();
+        $path = $file->storeAs('public/data', $filename);
 
         // import data
-        Excel::import(new DataTrainingImport(), $path.$file_name);
+        Excel::import(new DataTrainingImport(), storage_path('app/'.$path));
 
-        // notifikasi dengan session
-        //Session::flash('sukses','Data Siswa Berhasil Diimport!');
-
-        // alihkan halaman kembali
         return redirect('/training');
     }
 }
