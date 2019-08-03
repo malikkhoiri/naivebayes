@@ -38,3 +38,9 @@ Route::get('/process/testing', 'ProcessController@testing');
 
 Route::get('/training', 'DataTrainingController@index');
 Route::post('/training/import-csv', 'DataTrainingController@import_csv')->name('importCSV');
+
+Route::get('/pdf', function (){
+    return view('pdf.analysis');
+});
+
+Route::get('/pdf-download', 'AnalysisController@exportPdf');
