@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Answer;
 use App\Classe;
-use App\DataTraining;
 use App\Imports\AnswerImport;
 use App\Mapel;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -31,20 +31,26 @@ class AnalysisController extends Controller
             $data[$key] = array_slice($arr, 2);
         }
 
+        $n = count($name);
+
         $score = [];
 
         foreach ($data as $key => $arr){
-            $score[$key] = array_sum($arr);
+            $score[$key] = array_sum($arr)/count($arr)*100;
         }
 
         arsort($score);
         $rank = array_keys($score);
 
         $data_t = $this->transpose($data);
+        $pq = [];
 
-        foreach ($data_t as $d) {
-            array_push($difficulty, $this->getDifficulty(array_sum($d), count($name)));
-            array_push($diffStrength, $this->diffStrength($d, $rank, count($name)));
+        foreach ($data_t as $key => $d) {
+            array_push($difficulty, $this->getDifficulty(array_sum($d), $n));
+            array_push($diffStrength, $this->diffStrength($d, $rank, $n));
+
+            $p = array_sum($d)/count($d);
+            $pq[$key] = $p * (1-$p);
         }
 
         $output = [];
@@ -53,15 +59,26 @@ class AnalysisController extends Controller
             array_push($output, $this->getDecision($difficulty[$i][1], $diffStrength[$i][1]));
         }
 
+        $variant = array_sum(array_map("self::square", $score))/$n - pow(array_sum($score)/$n, 2);
+
+        $r = $n/($n-1) * (1-array_sum($pq)/$variant);
+
+
         if(Route::getCurrentRoute()->uri() == "analysis/tes")
             dd($data, $name, $score, $data_t, $difficulty, $diffStrength, $output);
         else {
             Session::put('difficulty', $difficulty);
             Session::put('diffStrength', $diffStrength);
             Session::put('output', $output);
+
+            Session::put('reliable', ["n" => $n, "n_question" => count($data_t), "avg" => array_sum($score)/$n, "variant" => $variant, "r" => $r]);
         }
             return redirect('analysis')->with('success', true);
 
+    }
+
+    private function square($num){
+        return ($num*$num);
     }
 
     private function import($m_id, $c_id): array {
@@ -154,5 +171,10 @@ class AnalysisController extends Controller
         $classifier->train($samples, $target);
 
         return $classifier->predict([$difficulty, $diffStrength]);
+    }
+
+    public function exportPdf(){
+        $pdf = PDF::loadView('pdf.analysis');
+        return $pdf->download('test.pdf');
     }
 }
