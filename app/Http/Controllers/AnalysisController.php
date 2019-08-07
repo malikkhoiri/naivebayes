@@ -36,7 +36,7 @@ class AnalysisController extends Controller
         $score = [];
 
         foreach ($data as $key => $arr){
-            $score[$key] = array_sum($arr)/count($arr)*100;
+            $score[$key] = array_sum($arr);
         }
 
         arsort($score);
