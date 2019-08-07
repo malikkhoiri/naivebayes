@@ -27,6 +27,7 @@
                         </div>
                         @if(session('output'))
                             <pre>Input: <br>@foreach(session('input') as $key => $val){{$key}} => {{$val}}<br>@endforeach<br>Output: {{session('output')}}<br></pre>
+                            {{Session::remove('output')}}
                         @endif
                     </div>
                 </div>

@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-12 margin-bottom-30">
                                 <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importCSV">
-                                    IMPORT CSV
+                                    Import CSV
                                 </button>
 
                                 {{--Modals #importCSV--}}
