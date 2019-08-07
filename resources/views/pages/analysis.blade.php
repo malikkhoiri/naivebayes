@@ -48,9 +48,20 @@
                             <h3 class="panel-title">Hasil Analisis</h3>
                         </div>
                         <div class="panel-body">
+                            @php
+                                $mc = Session::get('mc');
+                            @endphp
+                            <div class="row">
+                                <div class="col-md-2">Mata Pelajaran</div>
+                                <div class="col-md-2">: {{$mc['m']}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">Kelas</div>
+                                <div class="col-md-2">: {{$mc['c']}}</div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <table class='table table-striped'>
+                                    <table class='table table-striped table-bordered'>
                                         <thead>
                                         <tr>
                                             <th style="width: 100px;" class="text-center">Soal</th>
@@ -110,7 +121,7 @@
                                             <td>{{$reliable["avg"]}}</td>
                                         </tr>
                                         <tr>
-                                            <th>Varianso</th>
+                                            <th>Variansi</th>
                                             <td>{{$reliable["variant"]}}</td>
                                         </tr>
                                         <tr>
@@ -152,7 +163,7 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <button type="submit" class="btn btn-primary">Export PDF</button>
+                            <a href="{{route('exportPdf')}}" class="btn btn-primary" target="_blank">Export PDF</a>
                         </div>
                     </div>
                 </div>

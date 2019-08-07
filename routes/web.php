@@ -31,6 +31,7 @@ Route::get('/answer/delete/{id}', 'AnswerController@destroy')->name('deleteAnswe
 
 Route::get('/analysis', 'AnalysisController@index');
 Route::get('/analysis/process', 'AnalysisController@analysis')->name('analysis');
+Route::get('/analysis/export-pdf', 'AnalysisController@analysis')->name('exportPdf');
 Route::get('/analysis/tes', 'AnalysisController@analysis');
 
 Route::get('/process', 'ProcessController@index');
@@ -38,9 +39,3 @@ Route::get('/process/testing', 'ProcessController@testing');
 
 Route::get('/training', 'DataTrainingController@index');
 Route::post('/training/import-csv', 'DataTrainingController@import_csv')->name('importCSV');
-
-Route::get('/pdf', function (){
-    return view('pdf.analysis');
-});
-
-Route::get('/pdf-download', 'AnalysisController@exportPdf');

@@ -6,12 +6,13 @@ use App\Answer;
 use App\Classe;
 use App\Imports\AnswerImport;
 use App\Mapel;
-use Barryvdh\DomPDF\PDF;
+use Dompdf\FontMetrics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Phpml\Classification\NaiveBayes;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class AnalysisController extends Controller
 {
@@ -20,6 +21,23 @@ class AnalysisController extends Controller
     }
 
     public function analysis(Request $request) {
+
+        if (Route::getCurrentRoute()->uri() == "analysis/export-pdf"){
+            $pdf = PDF::loadView('pdf.analysis');
+            $pdf->output();
+            $dom_pdf = $pdf->getDomPDF();
+
+            $canvas = $dom_pdf ->get_canvas();
+
+            $font = new FontMetrics($canvas, $dom_pdf->getOPtions());
+
+            $canvas->page_text($canvas->get_width()/2-35, $canvas->get_height()-35, "Page {PAGE_NUM} of {PAGE_COUNT}", $font->getFont('helvetica', 'normal'), 10, array(0, 0, 0));
+
+            return $pdf->stream('test.pdf');
+        }
+
+        $mc["m"] = (Mapel::where('id', $request->input('mapel'))->first())->name;
+        $mc["c"] = (Classe::where('id', $request->input('class'))->first())->class;
 
         $data = $this->import($request->input('mapel'), $request->input('class'));
         $name = [];
@@ -70,11 +88,13 @@ class AnalysisController extends Controller
             Session::put('difficulty', $difficulty);
             Session::put('diffStrength', $diffStrength);
             Session::put('output', $output);
+            Session::put('mc', $mc);
 
             Session::put('reliable', ["n" => $n, "n_question" => count($data_t), "avg" => array_sum($score)/$n, "variant" => $variant, "r" => $r]);
         }
-            return redirect('analysis')->with('success', true);
 
+
+        return redirect('analysis')->with('success', true);
     }
 
     private function square($num){
@@ -171,10 +191,5 @@ class AnalysisController extends Controller
         $classifier->train($samples, $target);
 
         return $classifier->predict([$difficulty, $diffStrength]);
-    }
-
-    public function exportPdf(){
-        $pdf = PDF::loadView('pdf.analysis');
-        return $pdf->download('test.pdf');
     }
 }
