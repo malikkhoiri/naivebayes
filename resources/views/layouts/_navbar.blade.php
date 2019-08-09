@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="brand">
-        <a href="#"><img src="{{asset('assets/img/logo-dark.png')}}" alt="Klorofil Logo" class="img-responsive logo"></a>
+    <div class="brand" style="width: 15%;">
+        <a href="#"><img style="margin-left: 35%" src="{{asset('dist/tutwuri.png')}}" height="64" width="64"  alt="Klorofil Logo" class="img-responsive logo"></a>
     </div>
     <div class="container-fluid">
         <div class="navbar-btn">
