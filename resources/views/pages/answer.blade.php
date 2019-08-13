@@ -102,7 +102,7 @@
                                             <td style="width: 100px;" class="text-center">{{$i++}}</td>
                                             <th>{{$ans->filename}}</th>
                                             <td style="width: 100px;" class="text-center">
-                                                <a href="#"><i class="fa fa-pencil"></i></a>&ensp;
+{{--                                                <a href="#"><i class="fa fa-pencil"></i></a>&ensp;--}}
                                                 <a href="{{route('deleteAnswer', $ans->id)}}"><i class="fa fa-trash"></i></a>&ensp;
                                                 <a href="{{route('downloadAnswer', $ans->id)}}"><i class="fa fa-download"></i></a>&ensp;
                                             </td>
