@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="brand" style="width: 15%;">
-        <a href="#"><img style="margin-left: 35%" src="{{asset('dist/tutwuri.png')}}" height="64" width="64"  alt="Klorofil Logo" class="img-responsive logo"></a>
+        <a href="{{url('/home')}}"><i class="my-icon"></i><span class="vertical-center">&ensp;SMP N 4 SAPE</span></a>
     </div>
     <div class="container-fluid">
         <div class="navbar-btn">

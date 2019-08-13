@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ __('SMP N 4 SAPE') }}</title>
 
     <!-- VENDOR CSS -->
     <link rel="stylesheet" href="{{asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}">
@@ -19,8 +19,20 @@
     <!-- GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
     <!-- ICONS -->
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{asset('assets/img/favicon.png')}}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{asset('assets/img/logo.png')}}">
+    <style type="text/css">
+        .my-icon {
+            background: url('{{asset('assets/img/logo.png')}}');
+            height: 21px;
+            width: 21px;
+            display: inline-block;
+            /* Other styles here */
+        }
+
+        .vertical-center {
+            vertical-align: 5px;
+        }
+    </style>
 </head>
 <body>
 <!-- WRAPPER -->
