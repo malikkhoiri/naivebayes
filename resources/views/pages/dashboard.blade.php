@@ -8,7 +8,7 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-sm-2">
-                                <img src="{{asset('assets/img/tutwuri.png')}}" style="width: 100%">
+                                <img src="{{asset('dist/tutwuri.png')}}" style="width: 100%" alt="Tutwuri">
                             </div>
 
                             <div class="col-sm-10">
