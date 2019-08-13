@@ -17,9 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+
     Route::get('/question', 'QuestionController@index');
     Route::post('/question/upload', 'QuestionController@upload')->name('uploadQuestion');
     Route::get('/question/download/{id}', 'QuestionController@download')->name('downloadQuestion');

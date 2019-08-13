@@ -2,7 +2,7 @@
     <div class="sidebar-scroll">
         <nav>
             <ul class="nav">
-                <li><a href="#" class="" id="dashboard"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="{{url('/home')}}" class="" id="dashboard"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
                 <li><a href="{{url('/question')}}" class="" id="question"><i class="lnr lnr-file-empty"></i> <span>Unggah Soal</span></a></li>
                 <li><a href="{{url('/answer')}}" class="" id="answer"><i class="lnr lnr-list"></i> <span>Unggah Jawaban</span></a></li>
                 <li><a href="{{url('/analysis')}}" class="" id="analysis"><i class="lnr lnr-inbox"></i> <span>Analisis Soal</span></a></li>
