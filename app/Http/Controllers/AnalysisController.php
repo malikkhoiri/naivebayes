@@ -6,6 +6,7 @@ use App\Answer;
 use App\Classe;
 use App\Imports\AnswerImport;
 use App\Mapel;
+use App\Question;
 use Dompdf\FontMetrics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Phpml\Classification\NaiveBayes;
 use Barryvdh\DomPDF\Facade as PDF;
+use PhpOffice\PhpWord\Element\TextBreak;
+use PhpOffice\PhpWord\IOFactory;
 
 class AnalysisController extends Controller
 {
@@ -33,13 +36,14 @@ class AnalysisController extends Controller
 
             $canvas->page_text($canvas->get_width()/2-35, $canvas->get_height()-35, "Page {PAGE_NUM} of {PAGE_COUNT}", $font->getFont('helvetica', 'normal'), 10, array(0, 0, 0));
 
-            return $pdf->stream('test.pdf');
+            return $pdf->stream('Hasil Analisis.pdf');
         }
 
         $mc["m"] = (Mapel::where('id', $request->input('mapel'))->first())->name;
         $mc["c"] = (Classe::where('id', $request->input('class'))->first())->class;
 
         $data = $this->import($request->input('mapel'), $request->input('class'));
+        $question = $this->getQuestion($request->input('mapel'), $request->input('class'));
         $name = [];
         $difficulty = [];
         $diffStrength = [];
@@ -85,6 +89,7 @@ class AnalysisController extends Controller
         if(Route::getCurrentRoute()->uri() == "analysis/tes")
             dd($data, $name, $score, $data_t, $difficulty, $diffStrength, $output);
         else {
+            Session::put('question', $question);
             Session::put('difficulty', $difficulty);
             Session::put('diffStrength', $diffStrength);
             Session::put('output', $output);
@@ -191,5 +196,47 @@ class AnalysisController extends Controller
         $classifier->train($samples, $target);
 
         return $classifier->predict([$difficulty, $diffStrength]);
+    }
+
+    private function getQuestion($m_id, $c_id){
+        $files = (Question::where('class_id', $c_id)->where('mapel_id', $m_id))->first();
+
+        $filePath = storage_path('app/'.$files->path);
+
+        $phpWord = IOFactory::createReader('Word2007')->load($filePath);
+
+        if(method_exists($phpWord, 'getSections')) {
+            foreach ($phpWord->getSections() as $section) {
+
+                $body = '';
+                if (method_exists($section, 'getElements')) {
+                    foreach ($section->getElements() as $e) {
+                        if (method_exists($e, 'getElements')) {
+                            foreach ($e->getElements() as $element) {
+                                if (method_exists($element, 'getText')) {
+                                    if (method_exists($element, 'getFontStyle')) {
+                                        $font = $element->getFontStyle();
+                                        $bold = $font->isBold() ? 'font-weight:bold;' : '';
+                                        $fontFamily = $font->getName();
+
+                                        $body .= '<span  style="font-family:' . $fontFamily . ';' . $bold . '">';
+                                        $body .= $element->getText() . '</span>';
+                                    }
+                                }
+                            }
+                        }
+
+                        if (class_exists(TextBreak::class)) {
+                            $body .= '<br/>';
+                        }
+
+                    }
+                }
+
+                return $body;
+            }
+        }
+
+        return '';
     }
 }
