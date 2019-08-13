@@ -84,6 +84,8 @@ class UserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
+
+            $user->password = Hash::make($request->input('password'));
         }
 
         if ($valid->fails())
@@ -94,7 +96,6 @@ class UserController extends Controller
 
         $user->name = $request->input('name');
         $user->role = $request->input('role');
-        $user->password = Hash::make($request->input('password'));
 
         $user->save();
 
